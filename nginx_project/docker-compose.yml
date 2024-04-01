@@ -1,3 +1,30 @@
+version: "3.8"
 services:
-  server-express:
-    image: node:20
+  server:
+    image: server
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    container_name: ${SERVER_HOST}
+    env_file: .env
+    ports:
+      - ${SERVER_PORT}:${SERVER_PORT}
+  server2:
+    image: server2
+    build:
+      context: ./server2
+      dockerfile: Dockerfile
+    container_name: ${SERVER_HOST2}
+    env_file: .env
+    ports:
+      - ${SERVER_PORT2}:${SERVER_PORT2}
+  nginx:
+    image: reverse-proxy
+    restart: always
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
+    container_name: ${NGINX_HOST}
+    env_file: .env
+    ports:
+      - ${NGINX_PORT}:${NGINX_PORT}
